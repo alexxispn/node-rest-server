@@ -1,52 +1,42 @@
 import UserModel from "../models/user.model.js";
+import {encryptPassword} from "../helpers/db-validator.js";
 
-export const getUsers = (req, res) => {
-    const {name = 'No name', apikey, page = 1, limit = 10} = req.query;
-
-    res.json({
-        msg: 'get API - controller',
-        name,
-        apikey,
-        page,
-        limit
-    });
+export const getUsers = async (req, res) => {
+    const {limit = 5, from = 0} = req.query;
+    const query = {state: true};
+    const [total, users] = await Promise.all([
+        UserModel.countDocuments(query),
+        UserModel.find(query)
+            .skip(Number(from))
+            .limit(Number(limit))
+    ]);
+    res.json({total, users});
 }
 
 export const postUser = async (req, res) => {
     const {name, email, password, role} = req.body;
-    const user = new UserModel({name, email, password, role});
-
+    const user = new UserModel({name, email, password: encryptPassword(password), role});
     await user.save();
-
-    res.status(201).json({
-        msg: 'post API - postUser',
-        user
-    });
+    res.status(201).json(user);
 }
 
-export const putUser = (req, res) => {
+export const putUser = async (req, res) => {
     const {id} = req.params;
-
-    res.json({
-        msg: 'put API - putUser',
-        id
-    });
+    const {_id, password, google, email, ...rest} = req.body;
+    if (password) rest.password = encryptPassword(password);
+    const user = await UserModel.findByIdAndUpdate(id, rest);
+    res.json(user);
 }
 
-export const deleteUser = (req, res) => {
+export const deleteUser = async (req, res) => {
     const {id} = req.params;
-
-    res.json({
-        msg: 'delete API - deleteUser',
-        id
-    });
+    const user = await UserModel.findByIdAndUpdate(id, {state: false});
+    res.json(user);
 }
 
-export const patchUser = (req, res) => {
+export const patchUser = async (req, res) => {
     const {id} = req.params;
-
     res.json({
-        msg: 'patch API - patchUser',
         id
     });
 }
