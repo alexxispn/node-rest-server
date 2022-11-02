@@ -1,4 +1,4 @@
-import Server from "./models/server.js";
+import Server from "./server.js";
 
 const app = new Server();
 app.listen();

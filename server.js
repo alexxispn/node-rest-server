@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import UserRoutes from "../routes/users.router.js";
+import UserRoutes from "./routes/users.router.js";
+import ConfigDb from "./database/config.db.js";
 
 dotenv.config();
 
@@ -10,8 +11,13 @@ export default class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.usersPath = '/api/users';
+        this.connectDb();
         this.middlewares();
         this.routes();
+    }
+
+    connectDb() {
+        ConfigDb();
     }
 
     middlewares() {

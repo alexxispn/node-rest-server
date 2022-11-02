@@ -1,3 +1,5 @@
+import UserModel from "../models/user.model.js";
+
 export const getUsers = (req, res) => {
     const {name = 'No name', apikey, page = 1, limit = 10} = req.query;
 
@@ -10,15 +12,15 @@ export const getUsers = (req, res) => {
     });
 }
 
-export const postUser = (req, res) => {
+export const postUser = async (req, res) => {
     const {name, email, password, role} = req.body;
+    const user = new UserModel({name, email, password, role});
+
+    await user.save();
 
     res.status(201).json({
         msg: 'post API - postUser',
-        name,
-        email,
-        password,
-        role
+        user
     });
 }
 
