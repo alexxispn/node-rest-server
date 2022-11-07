@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import AuthRouter from "./routes/auth.router.js";
 import UserRoutes from "./routes/users.router.js";
 import ConfigDb from "./database/config.db.js";
 
@@ -10,6 +11,7 @@ export default class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+        this.authPath = '/api/auth';
         this.usersPath = '/api/users';
         this.connectDb();
         this.middlewares();
@@ -27,6 +29,7 @@ export default class Server {
     }
 
     routes() {
+        this.app.use(this.authPath, AuthRouter);
         this.app.use(this.usersPath, UserRoutes);
     }
 

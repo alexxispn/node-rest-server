@@ -1,7 +1,7 @@
 import express from "express";
 import {check} from "express-validator";
 import {deleteUser, getUsers, patchUser, postUser, putUser} from "../controllers/users.controller.js";
-import ValidateUser from "../middlewares/validateUser.middleware.js";
+import ValidateFields from "../middlewares/validateFields.middleware.js";
 import {existEmail, existId, validRole} from "../helpers/db-validator.js";
 
 const router = express.Router();
@@ -13,18 +13,18 @@ router.post('/', [
     check('email', 'Email is not valid').isEmail(),
     check('email').custom(existEmail),
     check('role').custom(validRole),
-    ValidateUser
+    ValidateFields
 ], postUser);
 router.put('/:id', [
     check('id', 'ID is not valid').isMongoId(),
     check('id').custom(existId),
     check('role').custom(validRole),
-    ValidateUser
+    ValidateFields
 ], putUser);
 router.delete('/:id', [
     check('id', 'ID is not valid').isMongoId(),
     check('id').custom(existId),
-    ValidateUser
+    ValidateFields
 ], deleteUser);
 router.patch('/:id', patchUser);
 
