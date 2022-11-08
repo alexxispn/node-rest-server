@@ -1,11 +1,9 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import AuthRouter from "./routes/auth.router.js";
 import UserRoutes from "./routes/users.router.js";
 import ConfigDb from "./database/config.db.js";
 
-dotenv.config();
 
 export default class Server {
     constructor() {

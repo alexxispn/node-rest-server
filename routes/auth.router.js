@@ -1,7 +1,7 @@
 import express from "express";
 import {check} from "express-validator";
 import {login} from "../controllers/auth.controller.js";
-import ValidateFields from "../middlewares/validateFields.middleware.js";
+import ValidateFields from "../middlewares/validate-fields.middleware.js";
 
 
 const router = express.Router();

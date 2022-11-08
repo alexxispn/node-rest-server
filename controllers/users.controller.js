@@ -32,7 +32,8 @@ export const putUser = async (req, res = response) => {
 export const deleteUser = async (req, res = response) => {
     const {id} = req.params;
     const user = await UserModel.findByIdAndUpdate(id, {state: false});
-    res.json(user);
+    const userAuth = req.user;
+    res.json({user, userAuth});
 }
 
 export const patchUser = async (req, res) => {
