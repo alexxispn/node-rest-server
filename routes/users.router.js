@@ -1,6 +1,6 @@
 import express from "express";
 import {check} from "express-validator";
-import {deleteUser, getUsers, patchUser, postUser, putUser} from "../controllers/users.controller.js";
+import {deleteUser, getUsers, postUser, putUser} from "../controllers/users.controller.js";
 import {existEmail, existId, validRole} from "../helpers/db-validator.js";
 import {ValidateFields, ValidateJwt, ValidateRoles} from "../middlewares/index.js";
 
@@ -28,7 +28,6 @@ router.delete('/:id', [
     check('id').custom(existId),
     ValidateFields
 ], deleteUser);
-router.patch('/:id', patchUser);
 
 export default router;
 

@@ -2,6 +2,8 @@ import {response} from "express";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.model.js";
 import GenerateJwt from "../helpers/generate-jwt.js";
+import GoogleVerify from "../helpers/google-verify.js";
+import {encryptPassword} from "../helpers/db-validator.js";
 
 export const login = async (req, res = response) => {
     try {
@@ -34,3 +36,38 @@ export const login = async (req, res = response) => {
         });
     }
 }
+
+export const googleSignIn = async (req, res = response) => {
+    const {id_token} = req.body;
+    try {
+        const {name, email, picture} = await GoogleVerify(id_token);
+        let user = await UserModel.findOne({email});
+        if (!user) {
+            user = new UserModel({
+                name,
+                email,
+                password: encryptPassword('password'),
+                img: picture,
+                google: true,
+                role: 'USER_ROLE'
+            });
+            await user.save();
+        }
+        if (!user.state) {
+            return res.status(401).json({
+                msg: 'User blocked - contact the administrator'
+            });
+        }
+        const token = await GenerateJwt(user.id);
+        res.json({
+            msg: 'ok, google sign in',
+            user,
+            token
+        });
+    } catch (error) {
+        res.status(401).json({
+            msg: 'Token is not valid'
+        });
+    }
+}
+
