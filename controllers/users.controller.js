@@ -1,5 +1,5 @@
 import {response} from "express";
-import UserModel from "../models/user.model.js";
+import {UserModel} from "../models/index.js";
 import {encryptPassword} from "../helpers/db-validator.js";
 
 export const getUsers = async (req, res = response) => {

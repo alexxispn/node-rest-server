@@ -1,6 +1,5 @@
 import bycryptjs from 'bcryptjs';
-import RoleModel from "../models/role.model.js";
-import UserModel from "../models/user.model.js";
+import {RoleModel, UserModel} from '../models/index.js';
 
 export const encryptPassword = (password = '') => {
     const salt = bycryptjs.genSaltSync();

@@ -1,4 +1,8 @@
 import express from "express";
+import {check} from "express-validator";
+import {ValidateFields, ValidateJwt} from "../middlewares/index.js";
+import {postCategory} from "../controllers/categories.controller.js";
+
 
 const router = express.Router();
 
@@ -14,11 +18,11 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-    res.json({
-        msg: 'post from categories'
-    });
-});
+router.post('/', [
+    ValidateJwt,
+    check('name', 'Name is required').not().isEmpty(),
+    ValidateFields
+], postCategory);
 
 router.put('/:id', (req, res) => {
     res.json({

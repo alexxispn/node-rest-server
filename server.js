@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
-import AuthRouter from "./routes/auth.router.js";
-import UserRoutes from "./routes/users.router.js";
-import CategoriesRoutes from "./routes/categories.js";
+import {AuthRouter, CategoriesRouter, UsersRouter} from "./routes/index.js";
 import ConfigDb from "./database/config.db.js";
 
 
@@ -33,8 +31,8 @@ export default class Server {
 
     routes() {
         this.app.use(this.paths.authPath, AuthRouter);
-        this.app.use(this.paths.usersPath, UserRoutes);
-        this.app.use(this.paths.categoriesPath, CategoriesRoutes);
+        this.app.use(this.paths.usersPath, UsersRouter);
+        this.app.use(this.paths.categoriesPath, CategoriesRouter);
     }
 
     listen() {
