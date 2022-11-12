@@ -1,5 +1,5 @@
 import bycryptjs from 'bcryptjs';
-import {CategoryModel, RoleModel, UserModel} from '../models/index.js';
+import {CategoryModel, RoleModel, UserModel, ProductModel} from '../models/index.js';
 
 export const encryptPassword = (password = '') => {
     const salt = bycryptjs.genSaltSync();
@@ -30,6 +30,13 @@ export const existUserById = async (id) => {
 export const existCategoryById = async (id) => {
     const categoryExists = await CategoryModel.findById(id);
     if (!categoryExists) {
+        throw new Error(`ID ${id} does not exist`);
+    }
+}
+
+export const existProductById = async (id) => {
+    const productExists = await ProductModel.findById(id);
+    if (!productExists) {
         throw new Error(`ID ${id} does not exist`);
     }
 }
