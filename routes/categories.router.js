@@ -30,6 +30,7 @@ router.post('/', [
 router.put('/:id', [
     ValidateJwt,
     check('name', 'Name is required').not().isEmpty(),
+    check('id', 'Invalid ID').isMongoId(),
     check('id').custom(existCategoryById),
     ValidateFields
 ], putCategory);
