@@ -1,6 +1,6 @@
 import {model, Schema} from "mongoose";
 
-export default model('Category', new Schema({
+const CategorySchema = new Schema({
     name: {
         type: String,
         required: [true, 'Name is required'],
@@ -15,4 +15,11 @@ export default model('Category', new Schema({
         ref: 'User',
         required: true,
     }
-}));
+})
+
+CategorySchema.methods.toJSON = function () {
+    const {__v, state, ...category} = this.toObject();
+    return category;
+}
+
+export default model('Category', CategorySchema);
