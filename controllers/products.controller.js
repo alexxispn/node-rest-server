@@ -18,6 +18,9 @@ export const getProducts = async (req, res = response) => {
 export const getProduct = async (req, res = response) => {
     const {id} = req.params;
     const product = await ProductModel.findById(id)
+        .populate('user', 'name')
+        .populate('category', 'name');
+    res.json(product);
 }
 
 export const postProduct = async (req, res = response) => {
