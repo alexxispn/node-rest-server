@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import {AuthRouter, CategoriesRouter, UsersRouter} from "./routes/index.js";
+import {AuthRouter, CategoriesRouter, UsersRouter, ProductsRouter} from "./routes/index.js";
 import ConfigDb from "./database/config.db.js";
 
 
@@ -12,6 +12,7 @@ export default class Server {
             authPath: '/api/auth',
             usersPath: '/api/users',
             categoriesPath: '/api/categories',
+            productsPath: '/api/products',
 
         }
         this.connectDb();
@@ -33,6 +34,7 @@ export default class Server {
         this.app.use(this.paths.authPath, AuthRouter);
         this.app.use(this.paths.usersPath, UsersRouter);
         this.app.use(this.paths.categoriesPath, CategoriesRouter);
+        this.app.use(this.paths.productsPath, ProductsRouter);
     }
 
     listen() {
