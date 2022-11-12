@@ -43,12 +43,12 @@ export const putCategory = async (req, res = response) => {
     const {state, user, ...data} = req.body;
     data.name = data.name.toUpperCase();
     data.user = req.user._id;
-    const category = CategoryModel.findByIdAndUpdate(id, data, {new: true});
+    const category = await CategoryModel.findByIdAndUpdate(id, data, {new: true});
     res.json(category);
 }
 
 export const deleteCategory = async (req, res = response) => {
     const {id} = req.params;
-    const category = CategoryModel.findByIdAndUpdate(id, {state: false}, {new: true});
+    const category = await CategoryModel.findByIdAndUpdate(id, {state: false}, {new: true});
     res.json(category);
 }
