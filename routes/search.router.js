@@ -4,6 +4,6 @@ import {search} from "../controllers/search.controller.js";
 
 const router = express.Router();
 
-router.get("/:category/:product", search);
+router.get("/:collection/:term", search);
 
 export default router;

@@ -1,16 +1,15 @@
 import {response} from "express";
-import {ObjectId} from "mongoose";
-import {UserModel} from "../models/index.js";
+import {Types} from "mongoose";
+import {CategoryModel, ProductModel, UserModel} from "../models/index.js";
 
-
-const categories = [
-    'coffees',
-    'juices',
-    'breakfast'
+const collectionsAllowed = [
+    'users',
+    'categories',
+    'products'
 ];
 
 const searchUsers = async (term = '', res = response) => {
-    const isMongoId = ObjectId.isValid(term);
+    const isMongoId = Types.ObjectId.isValid(term);
     if (isMongoId) {
         const user = await UserModel.findById(term);
         return res.json({
@@ -28,34 +27,50 @@ const searchUsers = async (term = '', res = response) => {
     });
 }
 
+const searchCategories = async (term = '', res = response) => {
+    const regex = new RegExp(term, 'i');
+    const categories = await CategoryModel.find({name: regex, status: true});
+    res.json({
+        results: categories
+    });
+}
 
-export const search = (req, res = response) => {
-    const {category, product} = req.params;
-
-    if (!categories.includes(category)) {
-        return res.status(400).json({
-            ok: false,
-            msg: 'The category is not valid'
+const searchProducts = async (term = '', res = response) => {
+    const isMongoId = Types.ObjectId.isValid(term);
+    if (isMongoId) {
+        const product = await ProductModel.findById(term).populate('category', 'name');
+        return res.json({
+            results: (product) ? [product] : []
         });
     }
-    switch (category) {
-        case 'coffees':
-            res.json({
-                ok: true,
-                msg: 'Coffees'
-            });
+
+    const regex = new RegExp(term, 'i');
+    const products = await ProductModel.find({name: regex, status: true}).populate('category', 'name');
+    res.json({
+        results: products
+    });
+}
+
+export const search = async (req, res = response) => {
+    const {collection, term} = req.params;
+    if (!collectionsAllowed.includes(collection)) {
+        return res.status(400).json({
+            msg: `Allowed collections are: ${collectionsAllowed}`
+        });
+    }
+    switch (collection) {
+        case 'users':
+            await searchUsers(term, res);
             break;
-        case 'juices':
-            res.json({
-                ok: true,
-                msg: 'Juices'
-            });
+        case 'categories':
+            await searchCategories(term, res);
             break;
-        case 'breakfast':
-            res.json({
-                ok: true,
-                msg: 'Breakfast'
-            });
+        case 'products':
+            await searchProducts(term, res);
             break;
+        default:
+            res.status(500).json({
+                msg: 'Search not implemented yet'
+            });
     }
 }
