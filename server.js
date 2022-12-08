@@ -1,6 +1,15 @@
 import express from "express";
 import cors from "cors";
-import {AuthRouter, CategoriesRouter, UsersRouter, ProductsRouter, SearchRouter} from "./routes/index.js";
+import fileUpload from "express-fileupload";
+
+import {
+    AuthRouter,
+    CategoriesRouter,
+    ProductsRouter,
+    SearchRouter,
+    UploadsRouter,
+    UsersRouter
+} from "./routes/index.js";
 import ConfigDb from "./database/config.db.js";
 
 
@@ -13,7 +22,8 @@ export default class Server {
             usersPath: '/api/users',
             categoriesPath: '/api/categories',
             productsPath: '/api/products',
-            searchPath: '/api/search'
+            searchPath: '/api/search',
+            uploadsPath: '/api/uploads',
 
         }
         this.connectDb();
@@ -29,6 +39,11 @@ export default class Server {
         this.app.use(cors());
         this.app.use(express.json());
         this.app.use(express.static('public'));
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes() {
@@ -37,6 +52,7 @@ export default class Server {
         this.app.use(this.paths.categoriesPath, CategoriesRouter);
         this.app.use(this.paths.productsPath, ProductsRouter);
         this.app.use(this.paths.searchPath, SearchRouter);
+        this.app.use(this.paths.uploadsPath, UploadsRouter);
     }
 
     listen() {

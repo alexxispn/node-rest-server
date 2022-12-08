@@ -7,5 +7,5 @@ export {
     CategoryModel,
     UserModel,
     RoleModel,
-    ProductModel
+    ProductModel,
 };
