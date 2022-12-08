@@ -13,14 +13,11 @@ export default (files, validExtensions = ['png', 'jpg', 'jpeg', 'gif'], folder =
         }
         const fileName = uuidv4() + '.' + extension;
         const uploadPath = path.join('../uploads/', folder, fileName);
-        console.log(uploadPath);
 
         file.mv(uploadPath, (err) => {
             if (err) {
                 return reject(err);
             }
-            console.log(uploadPath);
-            console.log(fileName);
             resolve(fileName);
         });
     });

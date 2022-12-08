@@ -10,7 +10,6 @@ export const uploadFile = async (req, res = response) => {
             });
         }
         const fileName = await UploadFile(req.files, undefined, 'imgs');
-        console.log('fileName');
         res.json({
             fileName
         });
