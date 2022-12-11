@@ -12,7 +12,7 @@ export default (files, validExtensions = ['png', 'jpg', 'jpeg', 'gif'], folder =
             return reject(`Extension ${extension} is not allowed, only ${validExtensions}`);
         }
         const fileName = uuidv4() + '.' + extension;
-        const uploadPath = path.join('../uploads/', folder, fileName);
+        const uploadPath = path.join('uploads/', folder, fileName);
 
         file.mv(uploadPath, (err) => {
             if (err) {

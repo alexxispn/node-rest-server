@@ -6,7 +6,8 @@ import {
     existEmail,
     existProductById,
     existUserById,
-    validRole
+    validRole,
+    validCollections,
 } from "./db-validator.js";
 import UploadFile from "./upload-file.js";
 
@@ -19,5 +20,6 @@ export {
     existUserById,
     validRole,
     existProductById,
-    UploadFile
+    UploadFile,
+    validCollections,
 }

@@ -41,3 +41,12 @@ export const existProductById = async (id) => {
     }
 }
 
+export const validCollections = (collection = '', collections = []) => {
+    const included = collections.includes(collection);
+    if (!included) {
+        throw new Error(`Collection ${collection} is not allowed, only ${collections}`);
+    }
+    return true;
+}
+
+
